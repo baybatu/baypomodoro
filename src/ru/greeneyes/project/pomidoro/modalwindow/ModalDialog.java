@@ -54,7 +54,6 @@ public class ModalDialog {
 
 	public void show() {
 		SwingUtilities.invokeLater(new Runnable() {
-			@Override
 			public void run() {
 				jDialog.setVisible(true);
 			}
@@ -63,7 +62,6 @@ public class ModalDialog {
 
 	public void hide() {
 		SwingUtilities.invokeLater(new Runnable() {
-			@Override
 			public void run() {
 				jDialog.dispose();
 			}

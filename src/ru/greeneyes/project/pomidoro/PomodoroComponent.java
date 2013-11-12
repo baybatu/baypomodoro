@@ -50,7 +50,6 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 	private PomodoroModel model;
 	private SettingsPresenter settingsPresenter;
 
-	@Override
 	public void initComponent() {
 		Settings settings = getSettings();
 		settingsPresenter = new SettingsPresenter(settings);
@@ -70,13 +69,11 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 		return ServiceManager.getService(Settings.class);
 	}
 
-	@Override
 	public void disposeComponent() {
 		controlThread.shouldStop();
 	}
 
 	@NotNull
-	@Override
 	public String getComponentName() {
 		return "Pomodoro";
 	}
@@ -86,42 +83,34 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 	}
 
 	@Nls
-	@Override
 	public String getDisplayName() {
 		return settingsPresenter.getDisplayName();
 	}
 
-	@Override
 	public Icon getIcon() {
 		return settingsPresenter.getIcon();
 	}
 
-	@Override
 	public String getHelpTopic() {
 		return settingsPresenter.getHelpTopic();
 	}
 
-	@Override
 	public JComponent createComponent() {
 		return settingsPresenter.createComponent();
 	}
 
-	@Override
 	public boolean isModified() {
 		return settingsPresenter.isModified();
 	}
 
-	@Override
 	public void apply() throws ConfigurationException {
 		settingsPresenter.apply();
 	}
 
-	@Override
 	public void reset() {
 		settingsPresenter.reset();
 	}
 
-	@Override
 	public void disposeUIResources() {
 		settingsPresenter.disposeUIResources();
 	}
@@ -135,7 +124,6 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 
 		public UserNotifier(final Settings settings, final PomodoroModel model) {
 			model.addUpdateListener(this, new Runnable() {
-				@Override
 				public void run() {
 					switch (model.getState()) {
 						case STOP:
@@ -190,7 +178,6 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 
 		private void showPopupNotification() {
 			SwingUtilities.invokeLater(new Runnable() {
-				@Override
 				public void run() {
 					DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResult();
 					Project project = PlatformDataKeys.PROJECT.getData(dataContext);

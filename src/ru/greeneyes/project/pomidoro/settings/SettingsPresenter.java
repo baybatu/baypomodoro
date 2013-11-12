@@ -42,7 +42,6 @@ public class SettingsPresenter implements Configurable {
 		this.settings = settings;
 	}
 
-	@Override
 	public JComponent createComponent() {
 		settingsForm = new SettingsForm();
 		uiModel = new Settings();
@@ -54,14 +53,12 @@ public class SettingsPresenter implements Configurable {
 
 	private void setupUIBindings() {
 		final ActionListener actionListener = new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent event) {
 				updateUIModel();
 				updateUI();
 			}
 		};
 		ChangeListener changeListener = new ChangeListener() {
-			@Override
 			public void stateChanged(ChangeEvent e) {
 				actionListener.actionPerformed(null);
 			}
@@ -74,7 +71,6 @@ public class SettingsPresenter implements Configurable {
 		settingsForm.showToolWindowCheckbox.addChangeListener(changeListener);
 	}
 
-	@Override
 	public void disposeUIResources() {
 		settingsForm = null;
 	}
@@ -83,12 +79,10 @@ public class SettingsPresenter implements Configurable {
 		return !uiModel.equals(settings);
 	}
 
-	@Override
 	public void apply() throws ConfigurationException {
 		settings.loadState(uiModel);
 	}
 
-	@Override
 	public void reset() {
 		uiModel.loadState(settings);
 		updateUI();
@@ -158,17 +152,14 @@ public class SettingsPresenter implements Configurable {
 	}
 
 	@Nls
-	@Override
 	public String getDisplayName() {
 		return UIBundle.message("settings.title");
 	}
 
-	@Override
 	public Icon getIcon() {
 		return null; // TODO ?
 	}
 
-	@Override
 	public String getHelpTopic() {
 		return null;
 	}

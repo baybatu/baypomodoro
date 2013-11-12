@@ -116,12 +116,10 @@ public class Settings implements PersistentStateComponent<Settings> {
 		this.changeListener = changeListener;
 	}
 
-	@Override
 	public Settings getState() {
 		return this;
 	}
 
-	@Override
 	public void loadState(Settings settings) {
 		XmlSerializerUtil.copyBean(settings, this);
 		if (changeListener != null) changeListener.onChange(this);
