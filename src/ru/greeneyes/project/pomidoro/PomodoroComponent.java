@@ -91,7 +91,6 @@ public class PomodoroComponent implements ApplicationComponent, Configurable {
 		return settingsPresenter.getDisplayName();
 	}
 
-	@Override
 	public Icon getIcon() {
 		return settingsPresenter.getIcon();
 	}

@@ -163,7 +163,6 @@ public class SettingsPresenter implements Configurable {
 		return UIBundle.message("settings.title");
 	}
 
-	@Override
 	public Icon getIcon() {
 		return null; // TODO ?
 	}

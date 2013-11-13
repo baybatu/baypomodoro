@@ -51,10 +51,12 @@ public class PomodoroModelState implements PersistentStateComponent<PomodoroMode
 		this.setStartTime(startTime);
 	}
 
+	@Override
 	public PomodoroModelState getState() {
 		return this;
 	}
 
+	@Override
 	public synchronized void loadState(PomodoroModelState state) {
 		XmlSerializerUtil.copyBean(state, this);
 	}
