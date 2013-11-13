@@ -54,7 +54,6 @@ public class PomodoroPanelFactory extends StatusBarCustomComponentFactory implem
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				model.switchToNextState();
 			}
 
 			@Override
@@ -72,19 +71,19 @@ public class PomodoroPanelFactory extends StatusBarCustomComponentFactory implem
 	}
 
 	private String tooltipText(PomodoroModel model) {
-		String nextAction = "";
+		String currentStatus = "";
 		switch (model.getState()) {
 			case STOP:
-				nextAction = UIBundle.message("statuspanel.start");
+				currentStatus = UIBundle.message("statuspanel.stopAsCurrentStatus");
 				break;
 			case RUN:
-				nextAction = UIBundle.message("statuspanel.stop");
+				currentStatus = UIBundle.message("statuspanel.runAsCurrentStatus");
 				break;
 			case BREAK:
-				nextAction = UIBundle.message("statuspanel.stop_break");
+				currentStatus = UIBundle.message("statuspanel.breakAsCurrentStatus");
 				break;
 		}
-		return UIBundle.message("statuspanel.tooltip", nextAction, model.getPomodorosAmount());
+		return UIBundle.message("statuspanel.tooltip", currentStatus, model.getPomodorosAmount());
 	}
 
 	private void updateLabel(PomodoroModel model, JLabel label) {
