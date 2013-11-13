@@ -55,6 +55,7 @@ public class PomodoroPresenter {
 		updateUI();
 
 		model.addUpdateListener(this, new Runnable() {
+			@Override
 			public void run() {
 				updateUI();
 			}
@@ -63,6 +64,7 @@ public class PomodoroPresenter {
 
 	private void updateUI() {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				switch (model.getState()) {
 					case RUN:

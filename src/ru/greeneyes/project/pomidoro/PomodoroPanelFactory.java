@@ -43,8 +43,10 @@ public class PomodoroPanelFactory extends StatusBarCustomComponentFactory implem
 		updateLabel(model, label);
 
 		model.addUpdateListener(label, new Runnable() {
+			@Override
 			public void run() {
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						updateLabel(model, label);
 					}
@@ -103,17 +105,21 @@ public class PomodoroPanelFactory extends StatusBarCustomComponentFactory implem
 		}
 	}
 
+	@Override
 	public WidgetPresentation getPresentation(@NotNull PlatformType type) {
 		return null; // TODO migrate from StatusBarCustomComponentFactory
 	}
 
+	@Override
 	public void install(@NotNull StatusBar statusBar) {
 	}
 
+	@Override
 	public void dispose() {
 	}
 
 	@NotNull
+	@Override
 	public String ID() {
 		return "Pomodoro";
 	}
