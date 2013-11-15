@@ -41,6 +41,8 @@ public class Settings implements PersistentStateComponent<Settings> {
 	public boolean blockDuringBreak = false;
 	public boolean showToolWindow = true;
 
+	public String pomodoroStatusMessage = "";
+
 	private long timeoutToContinuePomodoro = MILLISECONDS.convert(DEFAULT_BREAK_LENGTH, MINUTES);
 	private ChangeListener changeListener;
 
@@ -102,6 +104,14 @@ public class Settings implements PersistentStateComponent<Settings> {
 		this.showToolWindow = showToolWindow;
 	}
 
+	public String getPomodoroStatusMessage() {
+		return pomodoroStatusMessage;
+	}
+
+	public void setPomodoroStatusMessage(String pomodoroStatusMessage) {
+		this.pomodoroStatusMessage = pomodoroStatusMessage;
+	}
+
 	/**
 	 * If IntelliJ shuts down during pomodoro and then restarts, pomodoro can be continued.
 	 * This property determines how much time can pass before we consider pomodoro to be expired.
@@ -142,6 +152,7 @@ public class Settings implements PersistentStateComponent<Settings> {
 		if (ringVolume != settings.ringVolume) return false;
 		if (showToolWindow != settings.showToolWindow) return false;
 		if (timeoutToContinuePomodoro != settings.timeoutToContinuePomodoro) return false;
+		if (!pomodoroStatusMessage.equals(settings.pomodoroStatusMessage)) return false;
 
 		return true;
 	}
@@ -155,6 +166,7 @@ public class Settings implements PersistentStateComponent<Settings> {
 		result = 31 * result + (blockDuringBreak ? 1 : 0);
 		result = 31 * result + (showToolWindow ? 1 : 0);
 		result = 31 * result + (int) (timeoutToContinuePomodoro ^ (timeoutToContinuePomodoro >>> 32));
+		result = 31 * result + pomodoroStatusMessage.hashCode();
 		return result;
 	}
 
@@ -167,7 +179,10 @@ public class Settings implements PersistentStateComponent<Settings> {
 				", popupEnabled=" + popupEnabled +
 				", blockDuringBreak=" + blockDuringBreak +
 				", showToolWindow=" + showToolWindow +
+				", pomodoroStatusMessage='" + pomodoroStatusMessage + '\'' +
 				", timeoutToContinuePomodoro=" + timeoutToContinuePomodoro +
+				", changeListener=" + changeListener +
 				'}';
 	}
+
 }

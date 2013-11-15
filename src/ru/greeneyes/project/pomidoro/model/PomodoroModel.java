@@ -13,6 +13,7 @@
  */
 package ru.greeneyes.project.pomidoro.model;
 
+import java.io.IOException;
 import java.util.WeakHashMap;
 
 import static ru.greeneyes.project.pomidoro.model.PomodoroModel.PomodoroState.BREAK;
@@ -159,6 +160,10 @@ public class PomodoroModel {
 
 	public synchronized void addUpdateListener(Object key, Runnable runnable) {
 		listeners.put(key, runnable);
+	}
+
+	public synchronized int getTimeLeft() {
+		return getProgressMax() - getProgress();
 	}
 
 	private void loadModelState() {

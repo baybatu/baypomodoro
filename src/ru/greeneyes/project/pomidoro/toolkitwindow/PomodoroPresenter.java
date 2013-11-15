@@ -13,26 +13,39 @@
  */
 package ru.greeneyes.project.pomidoro.toolkitwindow;
 
+import ru.greeneyes.project.pomidoro.PomodoroComponent;
 import ru.greeneyes.project.pomidoro.UIBundle;
 import ru.greeneyes.project.pomidoro.model.PomodoroModel;
+import ru.greeneyes.project.pomidoro.statuschanger.CommandExecuter;
+import ru.greeneyes.project.pomidoro.statuschanger.CommandGenerator;
+import ru.greeneyes.project.pomidoro.statuschanger.IMSoftware;
+import ru.greeneyes.project.pomidoro.statuschanger.IMSoftwareFinder;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 /**
  * User: dima
  * Date: May 29, 2010
  */
 public class PomodoroPresenter {
+
+	private static final int IM_STATUS_UPDATE_FREQ = 60;
+
 	private final ImageIcon playIcon = new ImageIcon(getClass().getResource("/resources/play-icon.png"));
 	private final ImageIcon stopIcon = new ImageIcon(getClass().getResource("/resources/stop-icon.png"));
 
 	private final PomodoroForm form = new PomodoroForm();
 	private final PomodoroModel model;
 	private String progressBarPrefix = "";
+
+	private CommandExecuter commandExecuter = new CommandExecuter();
+	private CommandGenerator commandGenerator = new CommandGenerator();
+	private IMSoftwareFinder imSoftwareFinder = new IMSoftwareFinder(commandExecuter);
 
 	public PomodoroPresenter(final PomodoroModel model) {
 		this.model = model;
@@ -71,10 +84,12 @@ public class PomodoroPresenter {
 						form.getControlButton().setText(UIBundle.message("toolwindow.button_stop"));
 						form.getControlButton().setIcon(stopIcon);
 						progressBarPrefix = UIBundle.message("toolwindow.prefix_working");
+						changeStatusToBusy();
 						break;
 					case STOP:
 						form.getControlButton().setText(UIBundle.message("toolwindow.button_start"));
 						form.getControlButton().setIcon(playIcon);
+						changeStatusToAvailableForStop();
 						break;
 					case BREAK:
 						form.getControlButton().setText(UIBundle.message("toolwindow.button_stop"));
@@ -94,6 +109,46 @@ public class PomodoroPresenter {
 		});
 	}
 
+	private void changeStatusToBusy() {
+		int timeLeft = model.getTimeLeft();
+
+		if (timeLeft == 1) {
+			changeStatusToAvailable();
+			return;
+		}
+
+		if (timeLeft % IM_STATUS_UPDATE_FREQ != 0) {
+			return;
+		}
+
+		String imMessage = PomodoroComponent.getSettings().getPomodoroStatusMessage();
+		if (imMessage.contains("%minute%")) {
+			imMessage = String.format(imMessage.replace("%minute%", "%s"), remainingTimeInMinutes(timeLeft));
+		}
+
+		List<IMSoftware> availableSoftwares = imSoftwareFinder.getAvailableSoftwares();
+		for (IMSoftware availableSoftware : availableSoftwares) {
+			String command = commandGenerator.generateGoAwayCommand(availableSoftware, imMessage);
+			commandExecuter.exec(command);
+		}
+	}
+
+	private void changeStatusToAvailable() {
+		List<IMSoftware> availableSoftwares = imSoftwareFinder.getAvailableSoftwares();
+		for (IMSoftware availableSoftware : availableSoftwares) {
+			String command = commandGenerator.generateAvailableCommand(availableSoftware);
+			commandExecuter.exec(command);
+		}
+	}
+
+	private void changeStatusToAvailableForStop() {
+		List<IMSoftware> availableSoftwares = imSoftwareFinder.getAvailableSoftwares();
+		for (IMSoftware availableSoftware : availableSoftwares) {
+			String command = commandGenerator.generateAvailableCommand(availableSoftware);
+			commandExecuter.exec(command);
+		}
+	}
+
 	private static int hack_for_jdk1_6_u06__IDEA_9_0_2__winXP(int progress) {
 		// for some reason JProgressBar doesn't display text when progress is too small to be displayed
 		return progress < 10 ? 10 : progress;
@@ -103,6 +158,10 @@ public class PomodoroPresenter {
 		int min = timeLeft / 60;
 		int sec = timeLeft % 60;
 		return String.format("%02d", min) + ":" + String.format("%02d", sec);
+	}
+
+	public static String remainingTimeInMinutes(int timeLeft) {
+		return String.valueOf(timeLeft / 60);
 	}
 
 	public JComponent getContentPane() {

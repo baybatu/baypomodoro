@@ -24,6 +24,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * User: dima
@@ -57,7 +59,20 @@ public class SettingsPresenter implements Configurable {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				updateUIModel();
-				updateUI();
+			}
+		};
+		final KeyListener keyListener = new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent keyEvent) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent keyEvent) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent keyEvent) {
+				updateUIModel();
 			}
 		};
 		ChangeListener changeListener = new ChangeListener() {
@@ -72,6 +87,7 @@ public class SettingsPresenter implements Configurable {
 		settingsForm.blockDuringBreak.addChangeListener(changeListener);
 		settingsForm.ringVolumeSlider.addChangeListener(changeListener);
 		settingsForm.showToolWindowCheckbox.addChangeListener(changeListener);
+		settingsForm.statusMessageText.addKeyListener(keyListener);
 	}
 
 	@Override
@@ -115,6 +131,8 @@ public class SettingsPresenter implements Configurable {
 		uiModel.setPopupEnabled(settingsForm.popupCheckBox.isSelected());
 		uiModel.setBlockDuringBreak(settingsForm.blockDuringBreak.isSelected());
 		uiModel.setShowToolWindow(settingsForm.showToolWindowCheckbox.isSelected());
+
+		uiModel.setPomodoroStatusMessage(settingsForm.statusMessageText.getText());
 	}
 
 	private static Integer selectedItemAsInteger(JComboBox comboBox) {
@@ -139,6 +157,8 @@ public class SettingsPresenter implements Configurable {
 		settingsForm.popupCheckBox.setSelected(uiModel.isPopupEnabled());
 		settingsForm.blockDuringBreak.setSelected(uiModel.isBlockDuringBreak());
 		settingsForm.showToolWindowCheckbox.setSelected(uiModel.isShowToolWindow());
+
+		settingsForm.statusMessageText.setText(uiModel.getPomodoroStatusMessage());
 
 		updatingUI = false;
 	}
