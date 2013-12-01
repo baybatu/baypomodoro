@@ -16,6 +16,7 @@ package ru.greeneyes.project.pomidoro.toolkitwindow;
 import ru.greeneyes.project.pomidoro.PomodoroComponent;
 import ru.greeneyes.project.pomidoro.UIBundle;
 import ru.greeneyes.project.pomidoro.model.PomodoroModel;
+import ru.greeneyes.project.pomidoro.model.Settings;
 import ru.greeneyes.project.pomidoro.statuschanger.CommandExecuter;
 import ru.greeneyes.project.pomidoro.statuschanger.CommandGenerator;
 import ru.greeneyes.project.pomidoro.statuschanger.IMSoftware;
@@ -121,9 +122,12 @@ public class PomodoroPresenter {
 			return;
 		}
 
-		String imMessage = PomodoroComponent.getSettings().getPomodoroStatusMessage();
-		if (imMessage.contains("%minute%")) {
-			imMessage = String.format(imMessage.replace("%minute%", "%s"), remainingTimeInMinutes(timeLeft));
+		Settings settings = PomodoroComponent.getSettings();
+		String imMessage = settings.getPomodoroStatusMessage();
+		String minutePlaceHolder = settings.getMinutePlaceHolder();
+
+		if (imMessage.contains(minutePlaceHolder)) {
+			imMessage = String.format(imMessage.replace(minutePlaceHolder, "%s"), remainingTimeInMinutes(timeLeft));
 		}
 
 		List<IMSoftware> availableSoftwares = imSoftwareFinder.getAvailableSoftwares();

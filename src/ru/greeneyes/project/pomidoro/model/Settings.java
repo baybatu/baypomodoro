@@ -41,7 +41,9 @@ public class Settings implements PersistentStateComponent<Settings> {
 	public boolean blockDuringBreak = false;
 	public boolean showToolWindow = true;
 
-	public String pomodoroStatusMessage = "I'm doing pomodoro: %minute% min. left";
+	private final String MINUTE_PLACEHOLDER = "%m%";
+
+	public String pomodoroStatusMessage = "I'm doing pomodoro: " + MINUTE_PLACEHOLDER + " min. left";
 
 	private long timeoutToContinuePomodoro = MILLISECONDS.convert(DEFAULT_BREAK_LENGTH, MINUTES);
 	private ChangeListener changeListener;
@@ -110,6 +112,10 @@ public class Settings implements PersistentStateComponent<Settings> {
 
 	public void setPomodoroStatusMessage(String pomodoroStatusMessage) {
 		this.pomodoroStatusMessage = pomodoroStatusMessage;
+	}
+
+	public String getMinutePlaceHolder() {
+		return MINUTE_PLACEHOLDER;
 	}
 
 	/**
